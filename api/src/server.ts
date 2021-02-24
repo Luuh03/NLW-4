@@ -1,19 +1,14 @@
-import express, { request, response } from 'express';
+import "reflect-metadata";
+import express from "express";
+import { router } from "./routes";
+
+// Não é necessário específicar qual é o arquivo neste caso por ele ter o nome de index
+import "./database";
 
 const app = express();
 
-app.get("/", (request, response) => {
-  return response.json({message: "Hello World"});
-})
-
-// 1 param == rota(recurso da API)
-// 2 param == req, res
-
-// As rotas podem ser iguais, desde que os métodos sejam diferentes
-
-app.post("/", (request, response) => {
-  //receveu os dados que devem ser salvos
-  return response.json({message: "Os dados foram salvos com sucesso!"});
-})
+// informa ao server que vamos trabalhar com o formato .json, para que ele consiga pegar os dados do body
+app.use(express.json());
+app.use(router);
 
 app.listen(3333, () => console.log("Server is running!"));
