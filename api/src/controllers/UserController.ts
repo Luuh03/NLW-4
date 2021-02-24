@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { User } from "../models/User";
+import { getCustomRepository } from "typeorm";
+import { UserRepository } from "../repositories/UserRepository";
 // import necessário para passar um tipo para o request e response do " async create"
 
 class UserController {
@@ -9,7 +9,7 @@ class UserController {
     // desestruturação para tornar mais simples a "coleta" dos valores name e email no const user
     const { name, email } = request.body;
     
-    const usersRepository = getRepository(User);
+    const usersRepository = getCustomRepository(UserRepository);
 
     // select * from users where email = email
     const userAlreadyExists = await usersRepository.findOne({
@@ -24,12 +24,13 @@ class UserController {
     }
 
     const user = usersRepository.create({
-      name, email
+      name, 
+      email
     })
 
     await usersRepository.save(user);
 
-    return response.json(user);
+    return response.status(201).json(user);
   }
 }
 
